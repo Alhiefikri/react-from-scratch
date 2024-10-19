@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+
+    <!-- Mengimpor React dan ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Mengimpor Babel untuk menggunakan JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/jsx">
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+
+      // Komponen MyButton
+      function MyButton({ text, onClick }) {
+        const myStyle = (text !== 'Reset!') ? {} : { margin: 20, display: 'block' };
+
+        return (
+          <button onClick={onClick} style={myStyle}>
+            {text}
+          </button>
+        );
+      }
+
+      // Komponen MyCounter
+      function MyCounter({ counter }) {
+        return (
+          <span style={{ margin: 20 }}>{counter}</span>
+        );
+      }
+
+      // Komponen HomePage
+      function HomePage() {
+        const [counter, setCounter] = React.useState(2);
+
+        // Fungsi untuk mengalikan counter dengan 2
+        function multiply() {
+          setCounter(counter * 2);
+        }
+
+        // Fungsi untuk membagi counter dengan 2
+        function divide() {
+          setCounter(counter / 2);
+        }
+
+        // Fungsi untuk menambah counter dengan 1
+        function increment() {
+          setCounter(counter + 1);
+        }
+
+        // Fungsi untuk mengurangi counter dengan 1
+        function decrement() {
+          setCounter(counter - 1);
+        }
+
+        // Fungsi untuk mereset counter ke nilai awal (2)
+        function reset() {
+          setCounter(2);
+        }
+
+        return (
+          <div>
+            <MyButton text={'/'} onClick={divide} />
+            <MyCounter counter={counter} />
+            <MyButton text={'x'} onClick={multiply} />
+            <MyButton text={'+'} onClick={increment} />
+            <MyButton text={'-'} onClick={decrement} />
+            <MyButton text={'Reset'} onClick={reset} />
+          </div>
+        );
+      }
+
+      // Merender komponen HomePage ke dalam root
+      root.render(<HomePage />);
+    </script>
+  </body>
+</html>
