@@ -1,0 +1,148 @@
+@import url("https://fonts.googleapis.com/css2?family=Borel&family=Comfortaa:wght@300;400;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 1rem; /* Ukuran font dasar */
+  font-family: "Comfortaa", sans-serif;
+  color: #283618;
+  background-color: #fefae0;
+}
+
+.app {
+  width: 90%; /* Ubah menjadi lebih kecil */
+  max-width: 800px; /* Tambahkan max-width */
+  height: auto; /* Sesuaikan dengan konten */
+  margin: auto;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+}
+
+h1 {
+  font-family: "Borel";
+  text-align: center;
+  background-color: #283618;
+  color: white;
+  font-size: 3rem; /* Kurangi ukuran font */
+  padding: 2rem 0 1rem;
+}
+
+.add-form {
+  background-color: #dda15e;
+  padding: 1.5rem 0; /* Kurangi padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem; /* Kurangi gap */
+}
+
+.add-form h3 {
+  margin: 1rem 0; /* Kurangi margin */
+  font-size: 2rem; /* Kurangi ukuran font */
+}
+
+button,
+select,
+input {
+  background-color: #fefae0;
+  font-family: inherit;
+  border: none;
+  border-radius: 3rem;
+  padding: 0.8rem 2rem; /* Kurangi padding */
+  font-size: 1.6rem; /* Kurangi ukuran font */
+  cursor: pointer;
+}
+
+button {
+  background-color: #283618;
+  color: #fefae0;
+  font-weight: bold;
+}
+
+.list {
+  background-image: url(img/paper-bg.jpg);
+  background-repeat: repeat-y;
+  background-size: cover;
+  color: #fefae0;
+  padding: 1.5rem 0; /* Kurangi padding */
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 1.5rem; /* Kurangi gap */
+  align-items: center;
+  overflow-y: auto;
+}
+
+.list ul {
+  list-style: none;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.list li {
+  color: #283618;
+  font-size: 2rem; /* Kurangi ukuran font */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem; /* Kurangi margin */
+}
+
+.list input[type="checkbox"] {
+  height: 2rem; /* Ukuran checkbox */
+  width: 2rem; /* Ukuran checkbox */
+  accent-color: #283618;
+  margin-right: 0.5rem; /* Kurangi margin */
+}
+
+.list li button {
+  font-size: 1.6rem; /* Ukuran font button */
+  padding: 0;
+  width: 2rem; /* Ukuran button */
+  height: 2rem; /* Ukuran button */
+  background-color: red;
+  margin-left: 0.5rem; /* Kurangi margin */
+}
+
+.actions {
+  background-color: #606c38;
+  width: 100%;
+  padding: 1rem 0; /* Kurangi padding */
+  text-align: center;
+}
+
+.actions button,
+.actions select {
+  padding: 0.5rem 1rem; /* Kurangi padding */
+  font-size: 1.4rem; /* Ukuran font */
+  margin: 0 0.5rem; /* Kurangi margin */
+}
+
+.stats {
+  background-color: #bc6c25;
+  color: white;
+  text-align: center;
+  padding: 2rem 0; /* Kurangi padding */
+  font-size: 1.6rem; /* Ukuran font */
+  font-weight: bold;
+}
+
+/* tablet */
+@media (max-width: 768px) {
+  body {
+    font-size: 0.9rem; /* Kurangi ukuran font dasar */
+  }
+}
+
+@media (max-width: 576px) {
+  body {
+    font-size: 0.8rem; /* Kurangi ukuran font dasar */
+  }
+}
