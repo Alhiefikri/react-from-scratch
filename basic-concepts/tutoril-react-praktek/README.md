@@ -1,70 +1,123 @@
-# Getting Started with Create React App
+# README: Aplikasi Manajemen Produk Mobil
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Pendahuluan
 
-## Available Scripts
+Aplikasi ini memungkinkan pengguna untuk mengelola daftar produk mobil. Pengguna dapat menambah, mengedit, dan menghapus produk melalui antarmuka yang intuitif. Aplikasi ini dibangun menggunakan React dan terdiri dari beberapa komponen utama.
 
-In the project directory, you can run:
+## Struktur Proyek
 
-### `npm start`
+```
+src/
+├── components/
+│   ├── ProductCard.js
+│   ├── ProductCreate.js
+│   ├── ProductEdit.js
+│   ├── ProductList.js
+├── App.js
+├── App.css
+└── index.js
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Komponen Utama
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 1. ProductCard
 
-### `npm test`
+- **Deskripsi**: Menampilkan informasi detail dari produk, termasuk gambar, nama, dan deskripsi. Juga menyediakan opsi untuk mengedit dan menghapus produk.
+- **State**:
+  - `jumlahProduct`: Menyimpan jumlah produk yang ditambahkan ke keranjang.
+  - `showEdit`: Menentukan apakah form edit ditampilkan.
+- **Fungsi**:
+  - `kurangProduct`: Mengurangi jumlah produk di keranjang.
+  - `tambahProduct`: Menambahkan jumlah produk di keranjang.
+  - `handleSubmit`: Menyimpan perubahan saat mengedit produk.
+  - `cancelEdit`: Menutup form edit tanpa menyimpan perubahan.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Contoh Kode**:
 
-### `npm run build`
+```javascript
+import { useState } from "react";
+import { MdDeleteForever } from "react-icons/md";
+import { AiTwotoneEdit } from "react-icons/ai";
+import ProductEdit from "./ProductEdit";
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+const ProductCard = ({ product, onDeleteProduct, onEditProduct }) => {
+  // ... implementasi
+};
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2. ProductCreate
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Deskripsi**: Menyediakan form untuk menambah produk baru ke daftar.
+- **State**:
+  - `showForm`: Menentukan apakah form ditampilkan.
+  - `formData`: Menyimpan data produk baru yang akan ditambahkan.
+- **Fungsi**:
+  - `handleShow`: Mengelola visibilitas form.
+  - `handleSubmit`: Mengirim data produk baru dan mereset form.
+  - `handleChange`: Mengupdate state berdasarkan input pengguna.
 
-### `npm run eject`
+**Contoh Kode**:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```javascript
+import React, { useState } from "react";
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const ProductCreate = ({ onCreateProduct }) => {
+  // ... implementasi
+};
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 3. ProductEdit
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Deskripsi**: Menyediakan form untuk mengedit informasi produk yang ada.
+- **State**:
+  - `FormData`: Menyimpan data produk yang sedang diedit.
+- **Fungsi**:
+  - `handleChange`: Mengupdate state saat input berubah.
+  - `handleSubmit`: Mengirim perubahan yang telah dibuat.
+  - `onCancel`: Menutup form edit tanpa menyimpan perubahan.
 
-## Learn More
+**Contoh Kode**:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```javascript
+import React, { useState } from "react";
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+const ProductEdit = ({ product, onEditProduct, cancelEdit }) => {
+  // ... implementasi
+};
+```
 
-### Code Splitting
+### 4. ProductList
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **Deskripsi**: Menampilkan daftar produk dengan memetakan setiap produk ke dalam `ProductCard`.
+- **Props**: Menerima daftar produk dan fungsi untuk mengedit atau menghapus produk.
 
-### Analyzing the Bundle Size
+**Contoh Kode**:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```javascript
+import React from "react";
+import ProductCard from "./ProductCard";
 
-### Making a Progressive Web App
+const ProductList = ({ products, onDeleteProduct, onEditProduct }) => {
+  // ... implementasi
+};
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Alur Pengembangan Komponen
 
-### Advanced Configuration
+1. **Mulai dengan `ProductCard`**: Ini adalah komponen inti yang menampilkan detail produk.
+2. **Buat `ProductCreate`**: Menyediakan form untuk menambah produk baru.
+3. **Buat `ProductEdit`**: Menyediakan form untuk mengedit produk.
+4. **Buat `ProductList`**: Untuk menampilkan semua produk.
+5. **Implementasi `App.js`**: Mengelola state global dan menghubungkan komponen-komponen.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Penggunaan
 
-### Deployment
+1. **Menambah Produk**: Klik tombol "Add Product" untuk membuka form. Isi data produk dan klik "Submit".
+2. **Mengedit Produk**: Klik ikon edit di dalam `ProductCard`, ubah data, dan klik "Submit".
+3. **Menghapus Produk**: Klik ikon hapus di dalam `ProductCard` untuk menghapus produk.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Kesimpulan
 
-### `npm run build` fails to minify
+Aplikasi ini memberikan cara yang sederhana dan efisien untuk mengelola daftar produk mobil. Dengan memisahkan setiap fungsionalitas ke dalam komponen terpisah, kode menjadi lebih mudah dipelihara dan dikembangkan. Anda dapat menambahkan fitur lebih lanjut atau melakukan perbaikan berdasarkan umpan balik pengguna.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Jika ada pertanyaan lebih lanjut atau kebutuhan klarifikasi, silakan hubungi pengembang. Selamat mencoba!
