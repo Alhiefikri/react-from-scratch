@@ -1,7 +1,7 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../api/components/Navbar";
 import { useState, useContext, createContext } from "react";
-import Page from "../components/Page";
+import Page from "../api/components/Page";
 
 export const LoginContext = createContext();
 

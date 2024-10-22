@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { LoginContext } from "../hooks-contoh/UseContext";
+import { LoginContext } from "../../hooks-contoh/UseContext";
 
 const Page = () => {
   const [isLogin, setIsLogin] = useContext(LoginContext);

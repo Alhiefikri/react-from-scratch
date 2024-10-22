@@ -1,12 +1,13 @@
-import React from 'react';
+import React from "react";
 
 const Todos = ({ todo }) => {
   return (
     <div
       style={{
-        backgroundColor: `${todo.completed ? 'green' : 'red'}`,
+        backgroundColor: `${todo.completed ? "green" : "red"}`,
         margin: 10,
-      }}>
+      }}
+    >
       {todo.title}
     </div>
   );

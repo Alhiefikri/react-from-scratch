@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { LoginContext } from '../hooks-contoh/UseContext';
+import React, { useContext } from "react";
+import { LoginContext } from "../../hooks-contoh/UseContext";
 
 const LoginButton = () => {
   const [isLogin, setIsLogin] = useContext(LoginContext);
@@ -10,9 +10,10 @@ const LoginButton = () => {
     <li>
       <a
         onClick={handleClick}
-        className={`${!isLogin ? 'login' : 'logout'}`}
-        href="#home">
-        {!isLogin ? 'Login' : 'Logout'}
+        className={`${!isLogin ? "login" : "logout"}`}
+        href="#home"
+      >
+        {!isLogin ? "Login" : "Logout"}
       </a>
     </li>
   );

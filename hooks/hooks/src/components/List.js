@@ -1,10 +1,10 @@
-import React from 'react';
-import { useEffect, memo } from 'react';
+import React from "react";
+import { useEffect, memo } from "react";
 
 const List = ({ handler }) => {
-  const items = ['ikan', 'ayam', 'sapi', 'kambing', 'om alek'];
+  const items = ["ikan", "ayam", "sapi", "kambing", "om alek"];
   useEffect(() => {
-    console.log('Child Component redered');
+    console.log("Child Component redered");
   }, [handler]);
 
   return (
