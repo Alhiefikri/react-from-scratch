@@ -1,69 +1,55 @@
-# README untuk Komponen React: ProductList
+Berikut adalah penjelasan mengenai komponen `ProductList`, disusun dengan format yang mudah dipahami:
 
-## Penjelasan Komponen
+# Dokumentasi Komponen ProductList
 
-`ProductList` adalah komponen React yang bertugas untuk menampilkan daftar produk dalam bentuk kartu. Komponen ini menerima props yang berisi data produk dan fungsi untuk mengedit atau menghapus produk.
+## Pengertian
+
+`ProductList` adalah komponen yang bertugas untuk menampilkan daftar produk dalam bentuk kartu. Komponen ini menggunakan konteks untuk mendapatkan data produk dan merender komponen `ProductCard` untuk setiap produk.
 
 ## Tujuan Komponen
 
-Tujuan utama dari `ProductList` adalah untuk menyajikan informasi tentang produk dalam format yang mudah dibaca dan interaktif. Dengan komponen ini, pengguna dapat melihat daftar produk dan melakukan tindakan seperti mengedit atau menghapus produk tersebut.
+Tujuan utama komponen `ProductList` adalah:
 
-## Penjelasan Fungsi Kode
+1. Mengambil daftar produk dari `ProductContext`.
+2. Merender setiap produk dalam bentuk kartu menggunakan komponen `ProductCard`.
+3. Menyediakan tampilan yang terorganisir untuk semua produk yang ada.
 
-```javascript
-import React from "react";
+## Struktur Kode
+
+```jsx
+import React, { useContext } from "react";
 import ProductCard from "./ProductCard";
+import ProductContext from "../context/products";
 ```
 
-- **Import**: Komponen `React` dan `ProductCard` diimpor untuk digunakan dalam `ProductList`.
+- Mengimpor React, hook `useContext`, komponen `ProductCard`, dan konteks `ProductContext`.
 
-```javascript
-const ProductList = ({ products, onDeleteProduct, onEditProduct }) => {
+### Definisi Komponen
+
+```jsx
+const ProductList = () => {
+  const { products } = useContext(ProductContext);
 ```
 
-- **Definisi Komponen**: `ProductList` didefinisikan sebagai fungsi yang menerima props `products`, `onDeleteProduct`, dan `onEditProduct`.
-  - `products`: Array objek yang berisi data produk.
-  - `onDeleteProduct`: Fungsi yang dipanggil saat produk dihapus.
-  - `onEditProduct`: Fungsi yang dipanggil saat produk diedit.
+- Mendefinisikan komponen `ProductList`.
+- Menggunakan `useContext` untuk mengambil state `products` dari `ProductContext`.
 
-```javascript
+### Render Komponen
+
+```jsx
 return (
   <div className="cards">
     {products.map((product) => {
-      return (
-        <ProductCard
-          key={product.id}
-          product={product}
-          onDeleteProduct={onDeleteProduct}
-          onEditProduct={onEditProduct}
-        />
-      );
+      return <ProductCard key={product.id} product={product} />;
     })}
   </div>
 );
 ```
 
-- **Render**: Komponen mengembalikan sebuah `<div>` yang berisi kartu produk.
-  - `products.map(...)`: Mengiterasi setiap produk dalam array `products`.
-  - `ProductCard`: Untuk setiap produk, komponen `ProductCard` dibuat dengan props yang diperlukan.
-    - `key`: Memberikan key unik untuk setiap produk agar React dapat melacak perubahan.
-    - `product`: Data produk yang akan ditampilkan.
-    - `onDeleteProduct` dan `onEditProduct`: Fungsi yang diteruskan untuk menangani penghapusan dan pengeditan.
-
-```javascript
-export default ProductList;
-```
-
-- **Ekspor**: Komponen diekspor sehingga dapat digunakan di tempat lain dalam aplikasi.
-
-## Cara Berpikir React
-
-React berfokus pada komposisi komponen dan pengelolaan state. Komponen `ProductList` adalah contoh yang baik dari prinsip ini, di mana komponen yang lebih besar (list) terdiri dari beberapa komponen yang lebih kecil (kartu produk). Setiap perubahan pada state produk akan menyebabkan re-rendering, memastikan bahwa antarmuka pengguna selalu sinkron dengan data.
-
-## Analogi Sederhana
-
-Bayangkan `ProductList` seperti rak display di toko. Setiap kartu produk adalah barang yang ditampilkan di rak tersebut. Ketika kamu ingin menghapus atau mengubah sesuatu, kamu langsung berinteraksi dengan barang tersebut. `ProductList` berfungsi sebagai rak yang mengorganisir dan menampilkan semua barang (produk) untuk dilihat dan diubah.
+- Merender elemen `div` yang berfungsi sebagai wadah untuk kartu produk.
+- Menggunakan `map` untuk iterasi setiap produk dalam array `products` dan merender `ProductCard` untuk setiap produk.
+- Setiap `ProductCard` diberi atribut `key` menggunakan `product.id` untuk memastikan setiap elemen memiliki identitas unik.
 
 ## Kesimpulan
 
-Komponen `ProductList` merupakan bagian penting dalam aplikasi React yang memudahkan pengguna untuk berinteraksi dengan daftar produk. Dengan memisahkan logika tampilan dan interaksi melalui props, komponen ini mendemonstrasikan kekuatan React dalam membangun antarmuka pengguna yang dinamis dan responsif.
+Komponen `ProductList` berfungsi untuk menampilkan semua produk yang ada dalam aplikasi "Belanja Mobil". Dengan menggunakan `useContext`, komponen ini dapat mengakses data produk secara langsung dari konteks, sehingga memudahkan dalam mengelola dan menampilkan daftar produk. Struktur yang sederhana membuatnya mudah dipahami dan digunakan dalam aplikasi.

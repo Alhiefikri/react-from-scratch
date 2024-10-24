@@ -1,0 +1,19 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "text": "Lari Pagi",
+      "completed": true
+    },
+    {
+      "id": 2,
+      "text": "Sholat Subuh",
+      "completed": false
+    },
+    {
+      "id": "9819",
+      "text": "Sarapan",
+      "completed": false
+    }
+  ]
+}

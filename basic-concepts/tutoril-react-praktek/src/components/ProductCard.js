@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import { AiTwotoneEdit } from "react-icons/ai";
 import ProductEdit from "./ProductEdit";
+import ProductContext from "../context/products";
 
-const ProductCard = ({ product, onDeleteProduct, onEditProduct }) => {
+const ProductCard = ({ product }) => {
+  const { onDeleteProduct, onEditProduct } = useContext(ProductContext);
   const { id, nama, deskripsi, imageURL } = product;
   const [jumlahProduct, setJumlahProduct] = useState(0);
   const [showEdit, setShowEdit] = useState(false);
