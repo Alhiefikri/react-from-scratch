@@ -2,6 +2,8 @@
 
 Website portofolio personal yang menampilkan informasi profesional, keterampilan, dan proyek-proyek yang telah dikerjakan. Dirancang dengan pendekatan modern menggunakan React dan Tailwind CSS.
 
+![Alt Text](./src/assets/ss.png)
+
 ## Fitur Utama
 
 - Navigasi responsif
