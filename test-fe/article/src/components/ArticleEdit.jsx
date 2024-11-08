@@ -42,6 +42,7 @@ const ArticleEdit = ({ article }) => {
             className="input"
           />
         </div>
+
         <div className="flex-col gap-12 flex-1">
           <label className="text">Content</label>
           <textarea

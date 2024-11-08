@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import ProductContext from "./context/products";
 
 const App = () => {
+  const [count, setCount] = useState(0)
   const { fetchProducts } = useContext(ProductContext);
   useEffect(() => {
     fetchProducts();
@@ -12,6 +13,7 @@ const App = () => {
 
   return (
     <>
+      <div clasName="app-title">Hello World</div>
       <div className="app-title">Belanja Mobil</div>
       <ProductCreate />
       <ProductList />
