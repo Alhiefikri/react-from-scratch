@@ -8,7 +8,7 @@ function CommonInput({ label, onChange, type, name, id, value, placeholder }) {
         id={id}
         placeholder={placeholder || "Enter value here"}
         value={value}
-        onChange={onChange}
+        onChange={onChange1}
       />
     </div>
   );
