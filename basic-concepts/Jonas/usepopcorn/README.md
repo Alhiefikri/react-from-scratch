@@ -8,6 +8,8 @@ Selamat datang di dokumentasi komponen-komponen aplikasi! Di sini, saya akan men
 
 ## ![Aplikasi Screenshot](./src/assets/image.png)
 
+---
+
 ## **1. Navbar**
 
 ### **Pengertian**
@@ -230,8 +232,36 @@ Komponen `WatchedSummary` memberikan informasi statistik yang berguna bagi pengg
 
 ---
 
+## **Pembaruan dan Perubahan**
+
+### **1. Penambahan Komponen `MovieDetail`**
+
+Pada aplikasi ini, komponen `MovieDetail` ditambahkan untuk memberikan pengalaman yang lebih mendalam bagi pengguna yang ingin mengetahui informasi lebih lanjut mengenai film tertentu, termasuk sinopsis, rating, dan opsi untuk memberi rating pada film tersebut.
+
+- **Perubahan**: Penambahan props `
+
+selectedId`, `onCloseMovie`, dan `onAddWatched`.
+
+- **Tujuan**: Memungkinkan pengguna memilih film dari daftar dan melihat detail lengkapnya.
+
+### **2. Penambahan Komponen `WatchedSummary`**
+
+Komponen `WatchedSummary` ditambahkan untuk memberikan statistik singkat mengenai film yang sudah ditonton. Ini termasuk rata-rata rating IMDb, rating pengguna, dan durasi rata-rata film.
+
+- **Perubahan**: Penambahan props `watched` dan penggunaan fungsi `average`.
+- **Tujuan**: Memberikan ringkasan statistik untuk membantu pengguna melihat gambaran umum dari film yang telah mereka tonton.
+
+### **3. Penambahan Fitur Pengelolaan Film yang Ditonton**
+
+Komponen `WatchedMovieList` kini memungkinkan pengguna untuk menghapus film dari daftar yang sudah ditonton dengan menambahkan fungsionalitas `onDeleteWatched`.
+
+- **Perubahan**: Penambahan props `onDeleteWatched` dan `map()` pada film yang telah ditonton.
+- **Tujuan**: Memberikan fleksibilitas bagi pengguna untuk mengelola film yang sudah ditonton.
+
+---
+
 ## **Kesimpulan Umum**
 
 Aplikasi ini dibangun dengan menggunakan React untuk mengelola tampilan dan interaksi pengguna. Setiap komponen bertanggung jawab untuk bagian tertentu dari aplikasi, seperti menampilkan daftar film, menampilkan detail film, dan menampilkan daftar film yang sudah ditonton. Dengan cara ini, aplikasi menjadi modular dan mudah untuk dipahami serta dikembangkan lebih lanjut.
 
-Semoga penjelasan di atas membantu kamu
+Semoga penjelasan di atas membantu kamu memahami komponen-komponen aplikasi ini! 😊

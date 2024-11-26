@@ -227,86 +227,45 @@ Komponen `Movie` adalah komponen presentasional yang bertugas menampilkan inform
 
 ---
 
-### Komponen `MovieDetail`
+Baik, saya akan membuat penjelasan yang lebih jelas dan detail mengenai komponen `MovieDetail`, termasuk penggunaan **custom hook** `useKey` dan integrasi dengan **localStorage** secara lebih mendalam. Berikut adalah versi yang lebih lengkap dan detail:
 
 ---
 
-## **Pengertian**
+## **Komponen `MovieDetail`**
 
-Komponen `MovieDetail` menampilkan informasi lengkap tentang film yang dipilih, seperti judul, poster, sinopsis, rating IMDb, dan informasi lainnya. Komponen ini juga memungkinkan pengguna untuk memberikan rating film dan menambahkannya ke daftar film yang sudah ditonton. Jika film sudah ada dalam daftar "watched", maka pengguna akan melihat rating yang telah mereka berikan sebelumnya.
+### **Pengertian**
 
----
+Komponen `MovieDetail` digunakan untuk menampilkan informasi lengkap mengenai film yang dipilih oleh pengguna, seperti judul film, poster, tahun rilis, sinopsis, rating IMDb, dan detail lainnya. Komponen ini juga memungkinkan pengguna memberikan rating pribadi untuk film yang sedang ditampilkan dan menambahkannya ke dalam daftar film yang sudah ditonton. Selain itu, fitur interaktif lainnya termasuk penggunaan keyboard (tombol **Escape**) untuk menutup tampilan film dan penyimpanan data rating di **localStorage** agar tetap konsisten antar sesi.
 
-## **Cara Berpikir React**
+### **Fitur Utama**
 
-Komponen ini mengelola beberapa **state** lokal, termasuk status loading, detail film yang dimuat, dan rating pengguna. Ketika komponen dimuat, film yang dipilih (dengan `selectedId`) akan diambil dari API (OMDb API) menggunakan `useEffect`. Jika film sudah ditonton sebelumnya, komponen akan menampilkan rating yang telah diberikan. React's **state** dan **effect hooks** digunakan untuk mengatur data, menangani event, dan memperbarui tampilan berdasarkan interaksi pengguna.
-
----
-
-## **Analogi Sederhana**
-
-Bayangkan komponen `MovieDetail` seperti **tampilan rinci sebuah film** di aplikasi atau website streaming. Ketika kamu memilih sebuah film, kamu akan melihat informasi lengkapnya—seperti poster, sinopsis, aktor, dan rating. Kamu juga bisa memberikan rating dan menambahkannya ke daftar "film yang sudah ditonton". Jika film sudah ada dalam daftar tersebut, kamu hanya akan melihat rating yang telah kamu berikan.
+1. **Menampilkan Detail Film**: Komponen ini menampilkan detail seperti judul, poster, durasi, genre, aktor, sutradara, sinopsis, dan rating IMDb film yang dipilih.
+2. **Memberikan Rating Pengguna**: Pengguna dapat memberikan rating untuk film tersebut menggunakan komponen **StarRating**. Jika film telah ditonton sebelumnya, rating yang telah diberikan sebelumnya akan ditampilkan.
+3. **Menambah Film ke Daftar "Watched"**: Pengguna dapat menambah film ke dalam daftar film yang sudah ditonton jika film tersebut belum ada di daftar "watched".
+4. **Tombol Escape untuk Menutup Tampilan Film**: Tombol **Escape** dapat digunakan untuk menutup tampilan detail film dengan cepat.
+5. **Penyimpanan Data dengan `localStorage`**: Rating pengguna dan status film yang sudah ditonton disimpan dalam `localStorage` untuk memastikan data tetap ada meskipun aplikasi di-refresh atau pengguna menutup dan membuka aplikasi lagi.
 
 ---
 
-## **Penjelasan Code Tiap Baris**
+### **Penjelasan Detail tentang Komponen `MovieDetail`**
 
-### **Import dan Inisialisasi State**
+Komponen `MovieDetail` mengelola beberapa state lokal untuk menangani status dan data terkait film yang sedang ditampilkan. Berikut adalah penjelasan mendalam tentang bagaimana komponen ini bekerja.
 
-```js
-import { useEffect, useState } from "react";
-import { KEY } from "../../KEY";
-import Loader from "../../UI/Loader";
-import StarRating from "../../StarRating";
-```
-
-- Mengimpor **hook React** `useState` dan `useEffect`, serta komponen `Loader` dan `StarRating`.
-- `KEY` diimpor dari file lain, yang berisi API key untuk mengakses OMDb API.
-
-### **State Lokal dan Deklarasi Variabel**
+#### **State dan Variabel**
 
 ```js
 const [movie, setMovie] = useState({});
 const [isLoading, setIsLoading] = useState(false);
 const [userRating, setUserRating] = useState("");
+const countRef = useRef(0);
 ```
 
-- `movie`: Menyimpan data film yang diambil dari API.
-- `isLoading`: Status loading untuk menampilkan spinner (loader) saat film sedang diambil.
-- `userRating`: Menyimpan rating pengguna untuk film yang sedang ditampilkan.
+- **`movie`**: Menyimpan informasi lengkap tentang film yang dipilih dari API.
+- **`isLoading`**: Status loading yang digunakan untuk menampilkan loader/spinner ketika data film sedang diambil dari API.
+- **`userRating`**: Menyimpan rating yang diberikan oleh pengguna untuk film yang sedang ditampilkan.
+- **`countRef`**: Menggunakan `useRef` untuk menyimpan jumlah perubahan rating yang dilakukan oleh pengguna (misalnya jika pengguna mengubah rating beberapa kali).
 
-### **Memeriksa Apakah Film Sudah Ditonton**
-
-```js
-const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
-const watchUserRating = watched.find(
-  (movie) => movie.imdbID === selectedId
-)?.userRating;
-```
-
-- `isWatched`: Mengecek apakah film sudah ada dalam daftar film yang sudah ditonton (`watched`). Ini dilakukan dengan memeriksa apakah `imdbID` dari film yang dipilih (`selectedId`) ada dalam daftar `watched`.
-- `watchUserRating`: Mengambil rating pengguna dari daftar `watched` jika film sudah ditonton.
-
-### **Destructuring Data Film**
-
-```js
-const {
-  Title: title,
-  Year: year,
-  Poster: poster,
-  Runtime: runtime,
-  imdbRating,
-  Plot: plot,
-  Released: released,
-  Actors: actors,
-  Director: director,
-  Genre: genre,
-} = movie;
-```
-
-- Menggunakan **destructuring assignment** untuk mengambil properti penting dari objek `movie`, seperti judul, poster, tahun, rating IMDb, durasi, sinopsis, dan lainnya.
-
-### **Handle Fungsi untuk Menambah Film ke Daftar Watched**
+#### **Fungsi untuk Menambah Film ke Daftar "Watched"**
 
 ```js
 function handleAdd() {
@@ -318,37 +277,24 @@ function handleAdd() {
     imdbRating: Number(imdbRating),
     runtime: Number(runtime.split(" ").at(0)),
     userRating,
+    countRatingDecisions: countRef.current,
   };
   onAddWatched(newWatchMovie);
   onCloseMovie();
 }
 ```
 
-- `handleAdd`: Fungsi yang akan dipanggil ketika pengguna menambahkan film ke daftar yang sudah ditonton. Fungsi ini membuat objek film baru dengan informasi lengkap dan rating pengguna, lalu menambahkannya ke daftar `watched` melalui `onAddWatched`.
+- **`handleAdd`**: Fungsi yang dipanggil ketika pengguna menambahkan film ke dalam daftar film yang sudah ditonton. Fungsi ini membuat objek `newWatchMovie` yang berisi semua informasi penting tentang film yang dipilih, termasuk rating pengguna yang baru. Data ini kemudian ditambahkan ke daftar film yang sudah ditonton dengan memanggil fungsi `onAddWatched`.
 
-### **Effect untuk Menutup Film dengan Tombol Escape**
+#### **Hook `useKey` untuk Menutup Film dengan Tombol Escape**
 
 ```js
-useEffect(
-  function () {
-    function callback(e) {
-      if (e.code === "Escape") {
-        onCloseMovie();
-      }
-    }
-    document.addEventListener("keydown", callback);
-
-    return function () {
-      document.removeEventListener("keydown", callback);
-    };
-  },
-  [onCloseMovie]
-);
+useKey("Escape", onCloseMovie);
 ```
 
-- **`useEffect` pertama**: Menambahkan event listener untuk menutup detail film ketika tombol **Escape** ditekan. Event listener dibersihkan saat komponen dibersihkan (cleanup).
+- **`useKey`**: Hook ini memungkinkan komponen untuk merespons penekanan tombol keyboard. Pada contoh ini, ketika tombol **Escape** ditekan, fungsi `onCloseMovie` akan dipanggil, yang bertujuan untuk menutup tampilan detail film yang sedang ditampilkan. Ini meningkatkan pengalaman pengguna dengan memungkinkan navigasi lebih cepat menggunakan keyboard.
 
-### **Effect untuk Mengambil Detail Film dari API**
+#### **Effect untuk Mengambil Detail Film dari API**
 
 ```js
 useEffect(
@@ -368,9 +314,9 @@ useEffect(
 );
 ```
 
-- **`useEffect` kedua**: Ketika `selectedId` berubah, `useEffect` ini akan memanggil API OMDb untuk mengambil detail film berdasarkan ID yang dipilih. Setelah data diterima, state `movie` diperbarui dengan data film, dan status loading diubah menjadi `false`.
+- **`useEffect`**: Hook ini digunakan untuk mengambil data detail film dari API OMDb setiap kali `selectedId` (ID film yang dipilih) berubah. Ketika data berhasil diambil, state `movie` akan diperbarui dengan data yang diterima dari API. Selama proses pengambilan data, status loading (`isLoading`) akan diset ke `true` untuk menampilkan spinner, dan setelah data selesai diambil, status loading diubah menjadi `false`.
 
-### **Effect untuk Mengubah Title Halaman**
+#### **Effect untuk Mengubah Judul Halaman di Browser**
 
 ```js
 useEffect(
@@ -386,9 +332,32 @@ useEffect(
 );
 ```
 
-- **`useEffect` ketiga**: Mengubah judul halaman (tab browser) menjadi "Movie | {judul film}" setiap kali `title` film diperbarui. Setelah komponen dibersihkan, judul halaman akan dikembalikan ke "usePopcorn".
+- **`useEffect` kedua**: Hook ini digunakan untuk mengubah judul halaman di browser setiap kali film yang ditampilkan berubah. Judul halaman diubah menjadi "Movie | {title}" agar lebih informatif. Ketika komponen di-unmount atau judul film tidak lagi tersedia, judul halaman akan dikembalikan ke "usePopcorn" sebagai judul default aplikasi.
 
-### **Render UI Komponen**
+---
+
+### **Proses Pengambilan dan Penyimpanan Rating dengan LocalStorage**
+
+Jika pengguna memberikan rating untuk film yang sedang ditampilkan, komponen ini menyimpan rating pengguna ke dalam **localStorage** dan menambahkannya ke dalam daftar film yang sudah ditonton. Ini bertujuan untuk menjaga konsistensi data antar sesi.
+
+#### **Menggunakan LocalStorage**
+
+Misalnya, setiap kali pengguna menambahkan film ke dalam daftar "watched" melalui `handleAdd`, data seperti rating pengguna disimpan di **localStorage** agar tidak hilang saat aplikasi di-refresh.
+
+```js
+useEffect(() => {
+  const savedWatchedMovies =
+    JSON.parse(localStorage.getItem("watchedMovies")) || [];
+  onAddWatched(savedWatchedMovies);
+}, []);
+```
+
+- **Menyimpan Data**: Saat film ditambahkan ke daftar "watched", komponen akan menyimpan data film yang baru dalam **localStorage** agar data tersebut tetap ada meskipun pengguna menutup atau me-refresh aplikasi.
+- **Mengambil Data**: Data yang tersimpan dalam **localStorage** dapat diambil kembali pada saat aplikasi dimulai untuk menampilkan film yang sudah ditonton beserta rating yang diberikan sebelumnya.
+
+---
+
+### **Rendering UI**
 
 ```js
 return (
@@ -447,170 +416,14 @@ return (
 );
 ```
 
-- Menampilkan informasi detail film, termasuk judul, poster, sinopsis, rating IMDb, dan informasi lainnya.
-- Jika film belum ditonton, pengguna dapat memberikan rating dengan menggunakan komponen `StarRating` dan menambahkannya ke daftar "watched". Jika film sudah ditonton, rating yang telah diberikan ditampilkan.
+- **Tampilan**: Ketika data film telah berhasil diambil, komponen akan menampilkan detail film, seperti judul, poster, rating IMDb, sinopsis, dan aktor/sutradara.
+- **Rating Pengguna**: Pengguna dapat memberikan rating melalui komponen **StarRating**, dan tombol **+ Add to List** akan muncul jika rating sudah diberikan.
+- **Tombol Kembali**: Tombol dengan simbol panah `<` memungkinkan pengguna untuk menutup detail film dan kembali ke tampilan sebelumnya.
 
 ---
 
-## **Kesimpulan**
+### **Kesimpulan**
 
-Komponen `MovieDetail` adalah komponen yang bertugas menampilkan detail film yang dipilih, serta memungkinkan pengguna memberikan rating dan menambahkannya ke daftar film yang sudah ditonton. Komponen ini menggunakan beberapa `useEffect` hooks untuk menangani perubahan data, event keyboard (tombol Escape), dan pengambilan data film dari API. Dengan menggunakan state React untuk mengelola data, komponen ini memberikan pengalaman interaktif yang memungkinkan pengguna berinteraksi dengan informasi film secara dinamis.
+Komponen `MovieDetail` adalah komponen yang sangat dinamis dan interaktif dalam aplikasi. Dengan menggunakan **React Hooks** (`useState`, `useEffect`, `useRef`) dan custom hook `useKey`, komponen ini memberikan pengalaman pengguna yang mulus, termasuk kemampuan menutup film dengan tombol Escape dan menyimpan data secara permanen di **localStorage**.
 
----
-
-### Komponen `WatchedMovieList`
-
----
-
-## **Pengertian**
-
-Komponen `WatchedMovieList` bertanggung jawab untuk menampilkan daftar film yang sudah ditonton oleh pengguna. Komponen ini menerima props `watched`, yaitu array dari film-film yang sudah ditonton, dan memetakan masing-masing film ke dalam komponen `WatchMovie`. Selain itu, komponen ini juga menerima fungsi `onDeleteWatched` untuk menghapus film dari daftar yang sudah ditonton.
-
----
-
-## **Cara Berpikir React**
-
-Komponen ini mengandalkan **state** yang diteruskan melalui props (`watched`) untuk menampilkan daftar film yang sudah ditonton. Setiap film yang ada dalam daftar `watched` akan dipetakan ke dalam elemen `<li>` yang berisi komponen `WatchMovie`. Komponen `WatchMovie` akan menerima informasi tentang film serta fungsi untuk menghapus film dari daftar saat tombol hapus diklik.
-
----
-
-## **Analogi Sederhana**
-
-Bayangkan komponen ini seperti **daftar film yang sudah kamu tonton** dalam aplikasi. Setiap kali kamu menonton film dan menambahkannya ke daftar, komponen ini akan menampilkan film-film tersebut dalam bentuk daftar. Setiap item di dalam daftar memiliki tombol untuk menghapus film dari daftar tersebut, yang memungkinkan kamu untuk mengelola film yang sudah ditonton.
-
----
-
-## **Penjelasan Code Tiap Baris**
-
-### **Import Komponen `WatchMovie`**
-
-```js
-import WatchMovie from "../../WatchedMovie";
-```
-
-- Mengimpor komponen `WatchMovie` yang akan digunakan untuk menampilkan setiap film dalam daftar `watched`.
-
-### **Menerima Props dan Mapping Daftar Film**
-
-```js
-export default function WatchedMovieList({ watched, onDeleteWatched }) {
-  return (
-    <ul className="list">
-      {watched.map((movie) => (
-        <WatchMovie
-          movie={movie}
-          key={movie.imdbID}
-          onDeleteWatched={onDeleteWatched}
-        />
-      ))}
-    </ul>
-  );
-}
-```
-
-- **`watched`**: Array yang berisi daftar film yang sudah ditonton.
-- **`onDeleteWatched`**: Fungsi yang akan diteruskan ke komponen `WatchMovie` untuk menangani penghapusan film dari daftar yang sudah ditonton.
-- **`watched.map`**: Fungsi `.map()` digunakan untuk mengiterasi array `watched` dan merender setiap film menjadi komponen `WatchMovie`.
-- **`key={movie.imdbID}`**: Memberikan properti `key` untuk setiap komponen yang dirender. React memerlukan `key` untuk mengidentifikasi elemen secara unik saat merender daftar.
-- **`movie={movie}`**: Meneruskan objek film sebagai prop ke komponen `WatchMovie`.
-- **`onDeleteWatched={onDeleteWatched}`**: Meneruskan fungsi `onDeleteWatched` ke komponen `WatchMovie` untuk memungkinkan penghapusan film.
-
-### **Komponen `WatchMovie`**
-
-Komponen `WatchMovie` (yang diimpor di atas) bertanggung jawab untuk merender setiap film dalam daftar. Ini mungkin berisi tampilan informasi film dan tombol untuk menghapus film dari daftar.
-
----
-
-## **Kesimpulan**
-
-Komponen `WatchedMovieList` adalah komponen yang menampilkan daftar film yang sudah ditonton dengan menggunakan array `watched` yang diteruskan sebagai prop. Setiap film dalam daftar ditampilkan menggunakan komponen `WatchMovie`, dan setiap film dapat dihapus dari daftar dengan memanggil fungsi `onDeleteWatched`. Komponen ini membantu pengguna untuk mengelola film-film yang telah mereka tonton dalam aplikasi.
-
----
-
-### Komponen `WatchedSummary`
-
----
-
-## **Pengertian**
-
-Komponen `WatchedSummary` menampilkan ringkasan statistik dari film-film yang telah ditonton oleh pengguna. Ringkasan ini mencakup total jumlah film yang ditonton, rata-rata rating IMDb, rata-rata rating pengguna, dan total durasi film yang telah ditonton. Komponen ini menerima props `watched`, yaitu array yang berisi film-film yang sudah ditonton.
-
----
-
-## **Cara Berpikir React**
-
-Komponen ini menghitung nilai rata-rata dari berbagai properti film yang ada di dalam array `watched`. Misalnya, menghitung rata-rata rating IMDb, rating pengguna, dan runtime film. Kemudian, komponen ini menampilkan hasil perhitungan tersebut di dalam antarmuka pengguna. Komponen `WatchedSummary` tidak mengubah state, hanya membaca data yang diteruskan melalui props.
-
----
-
-## **Analogi Sederhana**
-
-Bayangkan kamu memiliki jurnal yang mencatat semua film yang sudah kamu tonton. Setelah menonton sejumlah film, kamu ingin tahu beberapa statistik seperti: "Berapa banyak film yang sudah saya tonton?" atau "Berapa rating rata-rata film yang saya tonton?". Komponen ini berfungsi seperti kalkulator yang menghitung statistik berdasarkan jurnal film yang telah kamu buat. Kemudian, komponen ini menampilkan hasilnya untuk kamu lihat.
-
----
-
-## **Penjelasan Code Tiap Baris**
-
-### **Menghitung Nilai Rata-Rata**
-
-```js
-const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-const avgUserRating = average(watched.map((movie) => movie.userRating));
-const avgRuntime = average(watched.map((movie) => movie.runtime));
-```
-
-- **`watched.map(...)`**: Menggunakan metode `.map()` untuk membuat array baru yang berisi nilai-nilai dari properti tertentu (seperti `imdbRating`, `userRating`, dan `runtime`) untuk setiap film dalam array `watched`.
-- **`average(...)`**: Fungsi `average` digunakan untuk menghitung rata-rata dari array yang sudah dibentuk sebelumnya. Fungsi `average` diimpor dari file `../../Average`, dan fungsinya mungkin terlihat seperti ini:
-  ```js
-  export function average(arr) {
-    const sum = arr.reduce((acc, val) => acc + val, 0);
-    return sum / arr.length;
-  }
-  ```
-  Fungsi ini mengakumulasi semua nilai dalam array menggunakan `.reduce()` dan kemudian membaginya dengan jumlah elemen di array untuk mendapatkan rata-rata.
-
-### **Menampilkan Statistik dalam UI**
-
-```js
-return (
-  <div className="summary">
-    <h2>Movies you watched</h2>
-    <div>
-      <p>
-        <span>#️⃣</span>
-        <span>{watched.length} movies</span>
-      </p>
-      <p>
-        <span>⭐️</span>
-        <span>{avgImdbRating.toFixed(2)}</span>
-      </p>
-      <p>
-        <span>🌟</span>
-        <span>{avgUserRating.toFixed(2)}</span>
-      </p>
-      <p>
-        <span>⏳</span>
-        <span>{avgRuntime} min</span>
-      </p>
-    </div>
-  </div>
-);
-```
-
-- **`watched.length`**: Menampilkan jumlah film yang telah ditonton dengan mengambil panjang array `watched`.
-- **`avgImdbRating.toFixed(2)`**: Menampilkan rata-rata rating IMDb dengan dua angka desimal.
-- **`avgUserRating.toFixed(2)`**: Menampilkan rata-rata rating pengguna dengan dua angka desimal.
-- **`avgRuntime`**: Menampilkan durasi rata-rata film yang telah ditonton dalam satuan menit.
-
-### **Penggunaan HTML dan Elemen `span`**
-
-- **`<span>#️⃣</span>`**: Menampilkan emoji "#️⃣" sebagai simbol untuk jumlah film.
-- **`<span>⭐️</span>`**: Menampilkan emoji "⭐️" sebagai simbol untuk rating IMDb.
-- **`<span>🌟</span>`**: Menampilkan emoji "🌟" sebagai simbol untuk rating pengguna.
-- **`<span>⏳</span>`**: Menampilkan emoji "⏳" sebagai simbol untuk durasi runtime.
-
----
-
-## **Kesimpulan**
-
-Komponen `WatchedSummary` memberikan gambaran statistik singkat tentang film-film yang telah ditonton oleh pengguna. Dengan menggunakan props `watched`, komponen ini menghitung rata-rata beberapa properti film (rating IMDb, rating pengguna, dan runtime), dan menampilkannya dengan cara yang mudah dibaca. Ini memberi pengguna gambaran umum tentang seberapa banyak film yang sudah mereka tonton dan bagaimana kualitas serta durasinya secara keseluruhan.
+Komponen ini tidak hanya menampilkan detail film, tetapi juga memungkinkan pengguna untuk berinteraksi dengan film tersebut—memberikan rating, menambahkannya ke dalam daftar "watched", dan mengelola data dengan cara yang efisien dan intuitif.

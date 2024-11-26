@@ -1,27 +1,44 @@
-# README - Komponen App
+Oh, paham sekarang! Jadi, kamu ingin penjelasan lebih mendalam mengenai **full code aplikasi** yang sudah kamu kirimkan, beserta **fitur baru yang ditambahkan** seperti penggunaan **custom hooks** dan **local storage**. Berikut adalah pembaruan yang mencakup fitur tambahan yang ada pada aplikasi tersebut.
+
+---
+
+# README - Komponen `App`
 
 ## Pengertian
 
-Komponen `App` adalah komponen utama dalam aplikasi yang mengelola seluruh alur dan logika aplikasi. Komponen ini mengatur pencarian film, menampilkan daftar film yang ditemukan, memungkinkan pengguna untuk menonton dan mengelola film yang sudah ditonton (watched), serta mengelola status loading dan error. Komponen ini juga mengatur komunikasi antara berbagai komponen lainnya, seperti `Navbar`, `MovieList`, dan `MovieDetail`.
+Komponen `App` adalah komponen utama dalam aplikasi yang mengelola alur dan logika aplikasi secara keseluruhan. Komponen ini mengatur pencarian film, menampilkan daftar film yang ditemukan, memungkinkan pengguna untuk menonton dan mengelola film yang sudah ditonton (watched), serta menangani status loading dan error. Selain itu, komponen `App` mengelola interaksi antar komponen-komponen lain seperti `Navbar`, `MovieList`, `MovieDetail`, dan `WatchedMovieList`.
 
-## Cara Berpikir React
+Pada aplikasi ini, pengguna dapat mencari film, melihat detail film yang dipilih, menambahkan film yang sudah ditonton ke dalam daftar "watched", dan menghapus film dari daftar tersebut. Selain itu, data film yang sudah ditonton disimpan secara persistens di `localStorage` sehingga tetap ada meskipun pengguna me-refresh halaman.
 
-React bersifat **komponen berbasis status** (state-driven). Komponen `App` bertindak sebagai induk dari berbagai komponen lainnya, dan sebagian besar logika aplikasi terpusat di sini. Komponen ini mengelola status aplikasi seperti:
+## Fitur Baru yang Ditambahkan
 
-- **`query`**: Kata kunci pencarian yang dimasukkan oleh pengguna.
-- **`movies`**: Daftar film yang ditemukan berdasarkan pencarian.
-- **`watched`**: Daftar film yang sudah ditonton.
-- **`isLoading`**: Status yang menunjukkan apakah aplikasi sedang memuat data.
-- **`error`**: Pesan error jika ada masalah dengan pengambilan data film.
-- **`selectedId`**: ID film yang dipilih untuk ditampilkan detailnya.
+### 1. **Custom Hooks untuk Mengambil Data (useMovies)**
 
-### Analogi Sederhana
+- **Fungsi**: `useMovies` adalah custom hook yang digunakan untuk mengelola pencarian dan pengambilan data film dari API.
+- **Penjelasan**: Hook ini menerima parameter `query` (kata kunci pencarian film), dan akan memanggil OMDB API setiap kali `query` berubah. Ketika data berhasil diambil, hook ini akan meng-update daftar film (`movies`). Jika ada error dalam pengambilan data (misalnya tidak ada film yang ditemukan), hook ini juga mengelola status error (`error`).
+- **Keuntungan**: Menggunakan custom hook `useMovies` memungkinkan pengelolaan logika pengambilan data di luar komponen utama, sehingga membuat kode menjadi lebih modular dan mudah dikelola.
 
-Bayangkan komponen `App` seperti seorang manajer di sebuah bioskop. Manajer ini mengelola pencarian film yang tersedia, mengatur film mana yang sudah ditonton oleh pengunjung, menampilkan detail film yang dipilih, dan juga menangani jika ada masalah dalam mencari film. Jika semua berjalan dengan baik, manajer akan menampilkan daftar film yang ditemukan, tetapi jika ada masalah (seperti tidak ada film yang ditemukan), dia akan memberi tahu pengunjung.
+### 2. **Custom Hook untuk Local Storage (useLocalStorageState)**
 
-## Penjelasan Code Tiap Baris
+- **Fungsi**: `useLocalStorageState` adalah custom hook yang digunakan untuk mengelola status aplikasi yang juga disimpan dalam `localStorage`.
+- **Penjelasan**: Hook ini digunakan untuk menyimpan daftar film yang sudah ditonton (`watched`) dalam `localStorage`. Dengan menggunakan hook ini, data `watched` tetap tersimpan meskipun pengguna me-refresh halaman. Hook ini menerima dua parameter: nilai awal (`initialState`) dan kunci untuk menyimpan data (`key`).
+- **Keuntungan**: Menyimpan data di `localStorage` memberikan pengalaman pengguna yang lebih baik karena data yang telah disimpan tetap ada saat aplikasi dimuat ulang. Hal ini memungkinkan pengguna untuk melanjutkan aktivitas mereka tanpa kehilangan data yang telah dimasukkan sebelumnya.
 
-### Import Dependencies
+### 3. **Penyimpanan dan Pengelolaan Data Film yang Sudah Ditonton**
+
+- **Fungsi**: Aplikasi ini memungkinkan pengguna untuk menambahkan film ke dalam daftar "watched" dan menghapus film dari daftar tersebut.
+- **Penjelasan**: Pengguna dapat memilih film dari daftar pencarian, melihat detail film tersebut, dan menambahkannya ke dalam daftar film yang sudah ditonton. Daftar film yang sudah ditonton ini kemudian disimpan dalam `localStorage` sehingga data tetap ada meskipun pengguna menutup aplikasi atau me-refresh halaman.
+- **Keuntungan**: Fitur ini memberikan kenyamanan kepada pengguna untuk mengelola film-film yang telah mereka tonton, dan memungkinkan mereka untuk kembali melihat daftar film yang telah ditonton sebelumnya.
+
+### 4. **Handling State for Loading and Error**
+
+- **Fungsi**: Aplikasi mengelola status loading (`isLoading`) dan error (`error`) selama pengambilan data dari API.
+- **Penjelasan**: Saat aplikasi mengambil data film dari API, status `isLoading` di-set ke `true` untuk menampilkan indikator loading (misalnya spinner). Jika terjadi kesalahan saat mengambil data (misalnya tidak ada film yang ditemukan atau masalah dengan koneksi), status `error` di-set dengan pesan yang sesuai. Jika pengambilan data berhasil, status `isLoading` di-set ke `false` dan daftar film yang ditemukan ditampilkan.
+- **Keuntungan**: Pengguna akan diberikan umpan balik visual yang jelas tentang status aplikasi, seperti indikator loading atau pesan error yang menjelaskan masalah yang terjadi.
+
+## Penjelasan Code Tiap Bagian
+
+### 1. **Import Dependencies**
 
 ```js
 import { useEffect, useState } from "react";
@@ -37,65 +54,60 @@ import MovieList from "./components/Main/Box/MovieList";
 import Main from "./components/Main/Main";
 import NumResults from "./components/Navbar/NumResult";
 import { KEY } from "./components/KEY";
+import { useMovies } from "./hooks/useMovies";
+import { useLocalStorageState } from "./hooks/useLocalStorageState";
 ```
 
-- Mengimpor berbagai komponen yang digunakan dalam aplikasi seperti `Loader`, `Navbar`, `Search`, `MovieList`, dan lainnya.
-- Mengimpor `KEY` yang berisi kunci API untuk mengambil data film dari OMDB API.
+- **useEffect, useState**: Hooks dari React untuk mengelola status dan efek samping dalam komponen.
+- **Loader, ErrorMessage, Navbar, etc.**: Komponen UI yang digunakan dalam aplikasi.
+- **KEY**: Kunci API untuk mengakses OMDB API.
+- **useMovies**: Custom hook untuk mengambil data film dari API.
+- **useLocalStorageState**: Custom hook untuk mengelola data di `localStorage`.
 
-### State Management
+### 2. **State Management**
 
 ```js
 const [query, setQuery] = useState("");
 const [movies, setMovies] = useState([]);
-const [watched, setWatched] = useState([]);
+const [watched, setWatched] = useLocalStorageState([], "watched");
 const [isLoading, setIsLoading] = useState(false);
 const [error, setError] = useState("");
 const [selectedId, setSelectedId] = useState(null);
 ```
 
-- Menggunakan hook `useState` untuk mengelola status aplikasi:
-  - `query`: Menyimpan kata kunci pencarian film.
-  - `movies`: Menyimpan hasil pencarian film.
-  - `watched`: Menyimpan daftar film yang sudah ditonton.
-  - `isLoading`: Menyimpan status apakah data sedang dimuat.
-  - `error`: Menyimpan pesan error jika ada masalah dalam mengambil data.
-  - `selectedId`: Menyimpan ID film yang dipilih untuk menampilkan detail.
+- **query**: Kata kunci pencarian film yang dimasukkan pengguna.
+- **movies**: Daftar film yang ditemukan berdasarkan pencarian.
+- **watched**: Daftar film yang sudah ditonton, disimpan di `localStorage`.
+- **isLoading**: Status untuk menandakan apakah data sedang dimuat.
+- **error**: Pesan error jika terjadi masalah saat mengambil data.
+- **selectedId**: ID film yang dipilih untuk ditampilkan detailnya.
 
-### Fungsi untuk Mengelola Rating dan Tindakan Pengguna
+### 3. **Fungsi untuk Mengelola Rating dan Tindakan Pengguna**
 
 ```js
 function handleSelectMovie(id) {
   setSelectedId((selectedId) => (id === selectedId ? null : id));
 }
-```
 
-- Fungsi ini mengatur ID film yang dipilih. Jika pengguna mengklik film yang sama, film tersebut akan "dilepas" (dengan mengatur `selectedId` ke `null`).
-
-```js
 function handleCloseMovie() {
   setSelectedId(null);
 }
-```
 
-- Fungsi ini menutup detail film yang sedang dibuka dengan mengatur `selectedId` ke `null`.
-
-```js
 function handleAddWatched(movie) {
   setWatched((watched) => [...watched, movie]);
 }
-```
 
-- Fungsi ini menambahkan film yang sudah ditonton ke dalam daftar `watched`.
-
-```js
 function handleDeleteWatched(id) {
   setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
 }
 ```
 
-- Fungsi ini menghapus film dari daftar `watched` berdasarkan ID-nya.
+- **handleSelectMovie**: Memilih film dan menampilkan detail film. Jika film yang sama diklik lagi, film tersebut akan "dilepas".
+- **handleCloseMovie**: Menutup detail film yang sedang ditampilkan.
+- **handleAddWatched**: Menambahkan film yang sudah ditonton ke dalam daftar `watched`.
+- **handleDeleteWatched**: Menghapus film dari daftar `watched`.
 
-### Pengambilan Data (API Request)
+### 4. **Pengambilan Data (API Request)**
 
 ```js
 useEffect(
@@ -144,14 +156,10 @@ useEffect(
 );
 ```
 
-- Menggunakan hook `useEffect` untuk mengambil data dari OMDB API setiap kali nilai `query` berubah.
-  - Jika `query` lebih pendek dari 3 karakter, pencarian dibatalkan.
-  - Data dari API diambil menggunakan `fetch()`. Jika respons tidak berhasil, akan ditampilkan pesan error.
-  - Jika data ditemukan, `movies` di-update.
-  - Jika terjadi kesalahan, pesan error akan ditampilkan.
-  - Setelah pengambilan data selesai, status loading akan berhenti.
+- **useEffect**: Mengambil data film dari OMDB API setiap kali nilai `query` berubah. Jika query kurang dari 3 karakter, pencarian dihentikan.
+- **AbortController**: Digunakan untuk membatalkan permintaan fetch jika pengguna mengetikkan query baru sebelum respons sebelumnya diterima.
 
-### Struktur JSX Komponen
+### 5. **Struktur JSX Komponen**
 
 ```js
 return (
@@ -193,14 +201,15 @@ return (
 );
 ```
 
-- Komponen ini merender seluruh struktur aplikasi:
-  - **`Navbar`**: Menampilkan kolom pencarian dan jumlah hasil film yang ditemukan.
-  - **`Main`**: Merupakan wadah utama yang membungkus dua kolom:
-    - Kolom pertama menampilkan daftar film yang ditemukan atau loader jika sedang memuat data. Jika ada error, maka pesan error akan ditampilkan.
-    - Kolom kedua menampilkan detail film yang dipilih atau daftar film yang sudah ditonton (`watched`).
+- **Navbar**: Menampilkan kolom pencarian dan jumlah hasil film yang ditemukan.
+- **Main**: Merupakan wadah utama yang membungkus dua kolom:
+  - Kolom pertama menampilkan daftar film atau loader jika sedang memuat data. Jika ada error, pesan error ditampilkan.
+  - Kolom kedua menampilkan detail film yang dipilih atau daftar film yang sudah ditonton.
 
-### Kesimpulan
+---
 
-Komponen `App` adalah komponen induk yang mengelola seluruh alur dan status aplikasi. Dengan menggunakan hooks seperti `useState` dan `useEffect`, komponen ini menangani pencarian film, pengelolaan film yang sudah ditonton, status loading, dan error handling.
+## Kesimpulan
 
-Komponen-komponen lain seperti `Navbar`, `MovieList`, `MovieDetail`, dan `WatchedMovieList` diintegrasikan dalam `App` untuk menyediakan tampilan antarmuka yang dinamis dan interaktif. Aplikasi ini memungkinkan pengguna untuk mencari film, menambahkan film yang sudah ditonton ke daftar, dan melihat detail film dengan mudah.
+Aplikasi ini adalah aplikasi pencarian film yang memungkinkan pengguna untuk mencari film, melihat detail film, serta mengelola daftar film yang sudah ditonton. Dengan menggunakan **custom hooks** seperti `useMovies` dan `useLocalStorageState`, aplikasi menjadi lebih modular dan data tetap tersimpan meskipun aplikasi dimuat ulang.
+
+Fitur utama aplikasi meliputi pencarian film, penyimpanan daftar film yang sudah ditonton, dan tampilan detail film yang dipilih.

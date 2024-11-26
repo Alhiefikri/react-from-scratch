@@ -1,3 +1,94 @@
+### Pembaruan README untuk Komponen Search
+
+Berikut adalah pembaruan README yang mencakup penjelasan mengenai perubahan terbaru pada komponen **Search**. Perubahan yang dimaksud adalah penggunaan custom hook `useKey` untuk menangani input keyboard (khususnya untuk mendeteksi tombol **Enter**) dan penggunaan `useRef` untuk merujuk ke elemen input. Dengan pembaruan ini, ketika pengguna menekan **Enter**, fokus akan dipindahkan ke elemen input dan query pencarian akan direset.
+
+---
+
+# README - Komponen Search
+
+## Pengertian
+
+Komponen `Search` berfungsi untuk membuat input pencarian bagi pengguna. Komponen ini memungkinkan pengguna untuk mengetikkan kata kunci dalam kotak teks, dan setiap perubahan pada teks akan memperbarui status pencarian (`query`) yang sedang digunakan di aplikasi. Selain itu, komponen ini juga mengimplementasikan fungsionalitas untuk mengatur ulang nilai pencarian ketika tombol **Enter** ditekan, melalui penggunaan **custom hook** `useKey`.
+
+## Cara Berpikir React
+
+Komponen `Search` adalah komponen yang bersifat **terkontrol**, artinya nilai inputnya sepenuhnya dikelola oleh React state. Dalam React, kita bisa mengontrol input atau elemen formulir lainnya dengan menghubungkan nilai elemen tersebut ke state menggunakan properti `value`. Ketika pengguna mengetik di dalam input, kita menangani perubahan ini melalui event handler (`onChange`) yang memperbarui state melalui fungsi `setQuery`.
+
+Selain itu, komponen ini juga menggunakan **custom hook** `useKey` untuk menambahkan interaksi dengan keyboard. Ketika tombol **Enter** ditekan, fokus akan dipindahkan kembali ke input dan query pencarian akan direset.
+
+## Fitur yang Diperkenalkan
+
+1. **Pengelolaan Input Pencarian**: Menggunakan state `query` dan fungsi `setQuery` untuk memperbarui nilai pencarian berdasarkan input pengguna.
+2. **Custom Hook `useKey`**: Menggunakan hook `useKey` untuk mendeteksi ketika tombol **Enter** ditekan. Ketika tombol **Enter** ditekan, input fokus akan beralih ke elemen input dan nilai pencarian (`query`) akan direset.
+3. **Referensi Input dengan `useRef`**: Menggunakan hook `useRef` untuk membuat referensi ke elemen input, yang kemudian digunakan untuk memindahkan fokus saat tombol **Enter** ditekan.
+
+## Analogi Sederhana
+
+Bayangkan komponen `Search` seperti kotak pencarian di website. Saat kamu mengetikkan sesuatu, kotak pencarian ini akan "mengingat" apa yang kamu ketik dan memperbarui tampilannya sesuai dengan teks yang ada. Namun, ketika kamu menekan tombol **Enter**, kotak pencarian ini akan mengatur ulang isinya dan memberi kamu kesempatan untuk memulai pencarian baru.
+
+- **Query** adalah kata kunci yang kamu ketik.
+- **SetQuery** adalah cara kita memberitahu kotak pencarian untuk "mengupdate" teks yang ditampilkan ketika kamu mengetik.
+- **Tombol Enter**: Ketika kamu menekan tombol **Enter**, fokus akan kembali ke kotak pencarian, dan teks yang kamu ketik akan dihapus untuk memulai pencarian baru.
+
+## Penjelasan Code Tiap Baris
+
+```js
+import { useRef } from "react";
+import { useKey } from "../../hooks/useKey";
+```
+
+- Mengimpor `useRef` untuk membuat referensi ke elemen input, dan `useKey` untuk mendeteksi ketika tombol **Enter** ditekan.
+
+```js
+export default function Search({ query, setQuery }) {
+  const inputEl = useRef(null);
+```
+
+- Mendefinisikan komponen `Search` yang menerima properti `query` dan `setQuery`.
+- Menggunakan `useRef` untuk membuat referensi (`inputEl`) ke elemen input. Ini memungkinkan kita untuk mengakses dan memanipulasi elemen input secara langsung.
+
+```js
+useKey("Enter", function () {
+  if (document.activeElement === inputEl.current) return;
+  inputEl.current.focus();
+  setQuery("");
+});
+```
+
+- Menggunakan custom hook `useKey` untuk mendeteksi ketika tombol **Enter** ditekan.
+- Jika elemen input saat ini tidak dalam fokus (diperiksa dengan `document.activeElement`), maka kita akan memindahkan fokus ke elemen input dengan `inputEl.current.focus()`.
+- Setelah fokus dipindahkan ke input, kita juga mengatur ulang nilai pencarian dengan `setQuery("")`, yang menghapus teks yang ada di input.
+
+```js
+  return (
+    <input
+      className="search"
+      type="text"
+      placeholder="Search movies..."
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      ref={inputEl}
+    />
+  );
+}
+```
+
+- Merender elemen input:
+  - **className="search"**: Memberikan kelas CSS pada elemen input untuk styling.
+  - **type="text"**: Menentukan bahwa tipe input adalah teks.
+  - **placeholder="Search movies..."**: Menampilkan teks placeholder ketika input kosong.
+  - **value={query}**: Mengikat nilai input ke state `query`, sehingga input ini akan selalu memperbarui nilai yang sama dengan `query`.
+  - **onChange={(e) => setQuery(e.target.value)}**: Menambahkan event handler `onChange` untuk memperbarui nilai `query` setiap kali pengguna mengetik di input.
+  - **ref={inputEl}**: Menghubungkan elemen input dengan referensi `inputEl` yang telah didefinisikan sebelumnya.
+
+## Kesimpulan
+
+Komponen `Search` adalah kotak input pencarian yang memungkinkan pengguna untuk mengetikkan kata kunci dan melakukan pencarian film. Komponen ini mengelola nilai pencarian menggunakan React state (`query` dan `setQuery`), dan memiliki fungsionalitas tambahan berkat penggunaan custom hook `useKey` untuk menangani interaksi dengan keyboard. Ketika pengguna menekan tombol **Enter**, fokus akan dipindahkan ke input dan nilai pencarian akan direset, memberikan pengalaman yang lebih dinamis dan interaktif.
+
+Dengan pembaruan ini, komponen `Search` tidak hanya menangani input teks, tetapi juga memberikan cara yang lebih mudah dan efisien bagi pengguna untuk memulai pencarian baru tanpa perlu mengklik elemen input.
+
+---
+
 # README - Komponen Navbar
 
 ## Pengertian
@@ -136,96 +227,5 @@ Komponen `NumResults` berfungsi untuk menampilkan jumlah hasil yang ditemukan, y
 Komponen ini sangat berguna dalam aplikasi yang menampilkan daftar hasil pencarian, karena memberi pengguna informasi langsung mengenai banyaknya data yang ditemukan sesuai dengan query pencarian mereka.
 
 Dengan cara kerja seperti ini, React mempermudah kita dalam membangun antarmuka yang dinamis dan responsif, di mana perubahan data secara otomatis akan memperbarui tampilan komponen tanpa perlu menulis kode tambahan untuk pengelolaan DOM secara manual.
-
----
-
-# README - Komponen Search
-
-## Pengertian
-
-Komponen `Search` berfungsi untuk membuat input pencarian bagi pengguna. Komponen ini memungkinkan pengguna untuk mengetikkan kata kunci dalam kotak teks, dan setiap perubahan pada teks akan memperbarui status pencarian (query) yang sedang digunakan di aplikasi. Komponen ini menerima dua properti (`query` dan `setQuery`) yang digunakan untuk mengelola nilai pencarian dan memperbarui statusnya.
-
-## Cara Berpikir React
-
-Komponen `Search` adalah komponen yang bersifat terkontrol, artinya nilai inputnya sepenuhnya dikelola oleh React state. Dalam React, kita bisa mengontrol input atau elemen formulir lainnya dengan menghubungkan nilai elemen tersebut ke state menggunakan properti `value`. Ketika pengguna mengetik di dalam input, kita menangani perubahan ini melalui event handler (dalam hal ini, `onChange`) yang akan memperbarui state melalui fungsi `setQuery`.
-
-## Analogi Sederhana
-
-Bayangkan komponen `Search` seperti kotak pencarian di website. Saat kamu mengetikkan sesuatu, kotak pencarian ini akan "mengingat" apa yang kamu ketik dan memperbarui tampilannya sesuai dengan teks yang ada.
-
-- **Query** adalah kata kunci yang kamu ketik.
-- **SetQuery** adalah cara kita memberitahu kotak pencarian untuk "mengupdate" teks yang ditampilkan ketika kamu mengetik.
-
-## Penjelasan Code Tiap Baris
-
-```js
-export default function Search({ query, setQuery }) {
-```
-
-- Baris ini mendefinisikan komponen `Search` sebagai fungsi yang menerima dua properti: `query` dan `setQuery`.
-  - `query`: Nilai saat ini dari pencarian (misalnya, teks yang diketik oleh pengguna).
-  - `setQuery`: Fungsi yang digunakan untuk memperbarui nilai pencarian (misalnya, mengubah teks yang diketik).
-
-```js
-  return (
-    <input
-```
-
-- Di sini, komponen `Search` merender elemen input `<input />` yang memungkinkan pengguna untuk mengetikkan sesuatu.
-
-```js
-className = "search";
-```
-
-- Memberikan elemen input sebuah kelas CSS `search` untuk memberi gaya pada elemen input tersebut.
-
-```js
-type = "text";
-```
-
-- Menentukan bahwa tipe input adalah teks biasa, yang berarti pengguna dapat mengetikkan karakter apa pun di dalamnya.
-
-```js
-placeholder = "Search movies...";
-```
-
-- Menyediakan teks placeholder yang akan muncul di dalam kotak input ketika kosong. Teks ini memberi petunjuk kepada pengguna tentang apa yang dapat mereka lakukan dengan kotak pencarian, seperti "Search movies...".
-
-```js
-value = { query };
-```
-
-- Mengikat nilai dari elemen input ke properti `query`. Artinya, nilai input ini akan selalu sesuai dengan nilai dari `query`, yang dikelola oleh state di komponen induk. Ini menjadikan input elemen ini **terkontrol**.
-
-```js
-    onChange={(e) => setQuery(e.target.value)}
-```
-
-- Menambahkan event handler `onChange`, yang menangani perubahan yang terjadi pada input. Setiap kali pengguna mengetik, fungsi ini akan dipanggil.
-  - `e.target.value` mengakses teks yang baru saja diketik oleh pengguna dalam input.
-  - `setQuery(e.target.value)` memanggil fungsi `setQuery` untuk memperbarui state dengan teks baru yang diketik oleh pengguna, yang kemudian akan mengupdate nilai `query` dan menyebabkan input diperbarui dengan nilai yang sama.
-
-```js
-  />
-```
-
-- Menutup tag `<input />`.
-
-```js
-}
-```
-
-- Menutup fungsi `Search`.
-
-## Kesimpulan
-
-Komponen `Search` adalah kotak input teks yang memungkinkan pengguna untuk melakukan pencarian. Komponen ini menerima dua properti:
-
-1. **query**: Nilai dari pencarian saat ini (teks yang diketik).
-2. **setQuery**: Fungsi untuk memperbarui nilai pencarian.
-
-Komponen ini memberikan antarmuka pencarian yang sederhana dan dinamis. Setiap kali pengguna mengetikkan sesuatu, nilai pencarian akan diperbarui secara otomatis, dan React akan menangani pembaruan antarmuka sesuai dengan nilai yang dimasukkan.
-
-Konsep penting dalam komponen ini adalah pengelolaan status (state) input yang terkontrol. Dengan menghubungkan nilai input ke properti `query` dan memperbarui state menggunakan `setQuery`, kita dapat memastikan bahwa nilai input selalu terbarui dan sesuai dengan status aplikasi.
 
 ---

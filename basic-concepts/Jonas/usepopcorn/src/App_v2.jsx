@@ -12,17 +12,14 @@ import MovieList from "./components/Main/Box/MovieList";
 import Main from "./components/Main/Main";
 import NumResults from "./components/Navbar/NumResult";
 import { KEY } from "./components/KEY";
-import { useMovies } from "./hooks/useMovies";
-import { useLocalStorageState } from "./hooks/useLocalStorageState";
 
 export default function App() {
   const [query, setQuery] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-
-  const { movies, isLoading, error, setMovies, setError, setIsLoading } =
-    useMovies(query);
-
-  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -35,8 +32,6 @@ export default function App() {
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
   }
-
-  // localStorage.setItem("watched", JSON.stringify([...watched, movies]));
 
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
