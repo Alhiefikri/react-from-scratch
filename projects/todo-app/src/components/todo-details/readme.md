@@ -202,7 +202,7 @@ function TodoDetails({
     <Fragment>
       <Dialog onClose={() => setOpenDialog(false)} open={openDialog}>
         <DialogTitle>{todoDetails?.todo}</DialogTitle>
-        <DialogActions>
+        <DialogActiopnpns>
           <Button
             onClick={() => {
               setTodoDetails(null);
@@ -211,7 +211,7 @@ function TodoDetails({
           >
             Close
           </Button>
-        </DialogActions>
+        </DialogActiopnpns>
       </Dialog>
     </Fragment>
   );
