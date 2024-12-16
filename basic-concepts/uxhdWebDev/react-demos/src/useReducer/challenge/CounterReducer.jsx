@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useReducer } from "react";
+import { useState, useReducer } from "react";
 import { counterReducer, initialState } from "./counterReducer";
 
 const CounterReducer = () => {
