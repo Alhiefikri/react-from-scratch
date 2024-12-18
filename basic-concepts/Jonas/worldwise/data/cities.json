@@ -10,7 +10,7 @@
         "lat": 38.727881642324164,
         "lng": -9.140900099907554
       },
-      "id": 73930385
+      "id": "73930385"
     },
     {
       "cityName": "Madrid",
@@ -22,19 +22,55 @@
         "lat": 40.46635901755316,
         "lng": -3.7133789062500004
       },
-      "id": 17806751
+      "id": "17806751"
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "cityName": "Jakarta",
+      "country": "Indonesia",
+      "emoji": "🇮🇩",
+      "date": "2028-03-01T10:00:00.000Z",
+      "notes": "Capital city of Indonesia, bustling with activity!",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
+        "lat": -6.2088,
+        "lng": 106.8456
       },
-      "id": 98443197
+      "id": "12345678"
+    },
+    {
+      "cityName": "Tokyo",
+      "country": "Japan",
+      "emoji": "🇯🇵",
+      "date": "2028-06-20T11:15:00.000Z",
+      "notes": "A modern city blending tradition and innovation.",
+      "position": {
+        "lat": 35.6762,
+        "lng": 139.6503
+      },
+      "id": "34567890"
+    },
+    {
+      "cityName": "Kyoto",
+      "country": "Japan",
+      "emoji": "🇯🇵",
+      "date": "2028-08-10T14:45:00.000Z",
+      "notes": "Historical city with beautiful temples.",
+      "position": {
+        "lat": 35.0116,
+        "lng": 135.7681
+      },
+      "id": "45678901"
+    },
+    {
+      "id": "195b",
+      "cityName": "Ubud",
+      "country": "Indonesia",
+      "emoji": "🇮🇩",
+      "date": "2024-12-18T08:19:14.019Z",
+      "notes": "kapan kapan",
+      "position": {
+        "lat": "-8.508365660860031",
+        "lng": "115.25379180908205"
+      }
     }
   ]
 }
