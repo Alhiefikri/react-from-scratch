@@ -1,10 +1,10 @@
-Tentu! Berikut adalah **README** yang terstruktur dengan baik dan penjelasan yang jelas, terfokus pada penggunaan **React Router 6** dalam proyek Anda.
-
----
-
 # **Pizza Ordering App with React Router 6**
 
 Aplikasi pemesanan pizza ini dibangun menggunakan **React** dan **React Router 6** untuk menangani navigasi antar halaman. Aplikasi ini memungkinkan pengguna untuk memilih pizza, melihat keranjang belanja, dan membuat pesanan. Proyek ini memanfaatkan berbagai fitur **React Router 6**, seperti **path dinamis**, **nested routes**, **loaders**, dan **actions** untuk membangun pengalaman pengguna yang mulus dan dinamis.
+
+<p align="center">
+  <img src="public/image.png" alt="screnshoot website" />
+</p>
 
 ## **Daftar Isi**
 

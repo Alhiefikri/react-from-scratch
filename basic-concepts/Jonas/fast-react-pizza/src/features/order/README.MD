@@ -316,3 +316,102 @@ export default CreateOrder;
 Komponen `CreateOrder` adalah form untuk membuat pesanan baru, yang mencakup input untuk nama, nomor telepon, alamat, dan pilihan prioritas pengiriman. Form ini memanfaatkan React Router's `Form` untuk pengiriman data dan `useNavigation` untuk menangani status pengiriman. Fungsi `action` digunakan untuk memvalidasi input dan mengirimkan pesanan ke server.
 
 Dengan menggunakan teknik seperti validasi form, pengelolaan status navigasi, dan pengiriman data menggunakan React Router, aplikasi dapat memberikan pengalaman pengguna yang lebih baik saat melakukan pemesanan.
+
+---
+
+# README: Memahami `useFetcher` di React Router
+
+## Pengertian
+
+Di dalam ekosistem React, **React Router** adalah pustaka yang digunakan untuk mengelola routing atau navigasi antar halaman dalam aplikasi berbasis React. Salah satu fitur penting dari React Router adalah `useFetcher`, yang memungkinkan kita untuk melakukan **fetching data** atau melakukan aksi seperti **mengirimkan data ke server** tanpa perlu memuat ulang halaman secara keseluruhan. Fitur ini berguna untuk melakukan request ke server secara "terisolasi" dan memperbarui bagian-bagian tertentu dari halaman sesuai dengan hasilnya.
+
+Pada contoh kode ini, kita akan menggunakan `useFetcher` untuk mengirimkan permintaan PATCH ke server untuk mengupdate status pesanan menjadi "priority".
+
+## Cara Berpikir React
+
+React bekerja dengan konsep **komponen** yang dapat dikombinasikan untuk membentuk UI. Di dalam aplikasi React, kita bisa melakukan **state management** dan **side-effects** untuk berinteraksi dengan data eksternal seperti API. React Router memberikan cara untuk melakukan **navigasi** di dalam aplikasi tanpa perlu memuat ulang halaman.
+
+React berfokus pada pemisahan UI menjadi komponen-komponen kecil yang dapat digunakan kembali. Ketika ada perubahan data atau interaksi pengguna, React akan memperbarui tampilan UI secara efisien menggunakan sistem **reconciliation**.
+
+Pada dasarnya, di React kita akan berpikir seperti ini:
+
+1. **Membuat komponen**: Setiap bagian UI adalah komponen.
+2. **State management**: Data yang digunakan oleh komponen dikelola melalui state.
+3. **Event handling**: Ketika terjadi interaksi dengan pengguna, kita mengubah state atau memanggil API untuk mendapatkan atau mengubah data.
+4. **Rendering**: React akan merender ulang UI setiap kali state atau data berubah.
+
+## Analogi Sederhana
+
+Bayangkan aplikasi React seperti sebuah restoran. Komponen-komponen adalah seperti meja-meja di restoran. Masing-masing meja memiliki pesanan (state), dan pelayan (React) akan mengambil dan mengantarkan pesanan tersebut sesuai dengan permintaan pelanggan.
+
+**`useFetcher`** di sini berfungsi seperti pelayan yang menerima pesanan (request), pergi ke dapur (API), dan kemudian membawa hasilnya kembali tanpa harus mengubah suasana restoran (halaman) secara keseluruhan.
+
+## Penjelasan Kode Tiap Baris
+
+Berikut adalah penjelasan kode yang diberikan:
+
+### Kode Komponen `UpdateOrder`
+
+```js
+import { useFetcher } from "react-router-dom";
+import Button from "../../ui/Button";
+import { updateOrder } from "../../services/apiRestaurant";
+```
+
+- `useFetcher`: Mengimpor hook `useFetcher` dari React Router untuk memungkinkan pengiriman data (request) ke server tanpa perlu me-refresh halaman.
+- `Button`: Komponen untuk tombol yang digunakan dalam UI. Ini adalah komponen UI yang telah dibuat sebelumnya.
+- `updateOrder`: Fungsi yang digunakan untuk mengirimkan request ke API untuk memperbarui data pesanan di server.
+
+```js
+function UpdateOrder({ order }) {
+  const fetcher = useFetcher();
+```
+
+- `UpdateOrder`: Ini adalah sebuah komponen React yang menerima props `order`. Props ini berisi informasi tentang pesanan yang akan diperbarui.
+- `fetcher`: Hook `useFetcher` digunakan untuk mendapatkan objek fetcher yang memungkinkan kita untuk mengirimkan permintaan ke server.
+
+```js
+  return (
+    <fetcher.Form method="PATCH" className="text-right">
+      <Button type="primary">Make priority</Button>
+    </fetcher.Form>
+  );
+}
+```
+
+- `<fetcher.Form>`: Komponen ini adalah bagian dari React Router yang digunakan untuk membungkus form dan menangani pengiriman data menggunakan `fetcher`. Ini adalah cara untuk mengirimkan data ke server tanpa memuat ulang halaman. Di sini, kita menggunakan metode `PATCH` yang biasanya digunakan untuk memperbarui data yang sudah ada.
+- `<Button>`: Komponen tombol yang akan ditampilkan kepada pengguna. Ketika tombol ini diklik, form akan dikirim menggunakan `fetcher.Form` dan memperbarui status pesanan.
+
+```js
+export default UpdateOrder;
+```
+
+- `export default UpdateOrder`: Menandakan bahwa komponen `UpdateOrder` ini akan diekspor sehingga bisa digunakan di tempat lain dalam aplikasi.
+
+### Kode `action` (Fungsi Aksi)
+
+```js
+export async function action({ request, params }) {
+  const data = { priority: true };
+  await updateOrder(params.orderId, data);
+  return null;
+}
+```
+
+- `action`: Fungsi ini dipanggil saat form di atas dikirim. Fungsi ini menerima dua parameter:
+  - `request`: Menyimpan informasi tentang permintaan yang dikirimkan.
+  - `params`: Menyimpan parameter dari URL (misalnya, ID pesanan).
+- `const data = { priority: true }`: Di sini kita membuat objek `data` yang akan dikirimkan ke server untuk mengupdate pesanan menjadi prioritas (`priority: true`).
+
+- `await updateOrder(params.orderId, data)`: Fungsi `updateOrder` akan dipanggil untuk memperbarui pesanan di server dengan ID yang ada di `params.orderId` dan mengirimkan data `priority: true`.
+
+- `return null`: Fungsi `action` biasanya mengembalikan data yang akan digunakan untuk memperbarui aplikasi setelah aksi berhasil. Di sini kita hanya mengembalikan `null` karena kita tidak perlu melakukan apa-apa setelah permintaan berhasil.
+
+## Kesimpulan
+
+- `useFetcher` adalah hook dari React Router yang memungkinkan kita untuk mengirimkan data ke server atau API tanpa memuat ulang halaman.
+- Fungsi `fetcher.Form` digunakan untuk membungkus form yang mengirimkan data menggunakan `fetcher` dan bisa menentukan metode HTTP (seperti `PATCH`, `POST`, atau `GET`).
+- Dalam contoh ini, kita menggunakan `useFetcher` untuk mengupdate pesanan dan menandai pesanan tersebut sebagai prioritas.
+- Fungsi `action` digunakan untuk menangani aksi ketika form dikirim, mengirimkan permintaan ke server, dan memperbarui status pesanan.
+
+Dengan pemahaman ini, Anda bisa mulai melihat bagaimana **komponen**, **state**, dan **fetching data** bekerja bersama dalam aplikasi React untuk memberikan pengalaman pengguna yang dinamis dan interaktif.
